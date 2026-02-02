@@ -3,8 +3,8 @@ import path from "path";
 
 
 // FOLDER PATHS
-const USER_TEMPLATE_DIR = path.join(process.cwd(), "templates", "user");
-const SYSTEM_TEMPLATE_DIR = path.join(process.cwd(), "templates", "system");
+const USER_TEMPLATE_DIR = path.join(process.cwd(), "src", "templates", "user");
+const SYSTEM_TEMPLATE_DIR = path.join(process.cwd(), "src", "templates", "system");
 
 // HELPERS
 function ensureDirExists(dir) {
@@ -107,7 +107,3 @@ export function deleteTemplate(id) {
 }
 
 
-// DEBUG LOGS
-
-console.log("USER_TEMPLATE_DIR:", USER_TEMPLATE_DIR);
-console.log("SYSTEM_TEMPLATE_DIR:", SYSTEM_TEMPLATE_DIR);

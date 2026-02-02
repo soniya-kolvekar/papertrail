@@ -18,5 +18,5 @@
     "Sound relatable and engaging"
   ],
   "prompt_instruction": "Create a casual and engaging caption based on the provided topic. Keep it short, fun, and suitable for social media.",
-  "is_system_template": false
+  "is_system_template": true
 }

@@ -1,16 +1,7 @@
 import { useLocation, /*useNavigate*/} from "react-router-dom";
 import { useState } from "react";
+import type {Template} from "../types/templates"
 
-interface Template {
-  id: string;
-  name: string;
-  type: string;
-  tone: string;
-  format: { sections: string[] };
-  style_rules: string[];
-  prompt_instruction: string;
-  is_system_template?: boolean;
-}
 
 export default function PromptBuilder() {
   const location = useLocation();

@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import "./index.css";
-
 import App from "./App";
 import Home from "./pages/Home";
 import Templates from "./pages/TemplatePage";
