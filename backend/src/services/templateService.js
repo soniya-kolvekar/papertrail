@@ -3,8 +3,8 @@ import path from "path";
 
 
 // FOLDER PATHS
-const USER_TEMPLATE_DIR = path.join(process.cwd(), "src", "templates", "user");
-const SYSTEM_TEMPLATE_DIR = path.join(process.cwd(), "src", "templates", "system");
+const USER_TEMPLATE_DIR = path.join(process.cwd(), "src","templates", "user");
+const SYSTEM_TEMPLATE_DIR = path.join(process.cwd(), "src","templates", "system");
 
 // HELPERS
 function ensureDirExists(dir) {

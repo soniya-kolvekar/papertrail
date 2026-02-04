@@ -1,0 +1,16 @@
+{
+  "id": "weekly_sync",
+  "name": "weekly sync",
+  "type": "MoM",
+  "tone": "formal",
+  "format": {
+    "sections": [
+      "discussion"
+    ]
+  },
+  "style_rules": [
+    "bullet points"
+  ],
+  "prompt_instruction": "none",
+  "is_system_template": false
+}

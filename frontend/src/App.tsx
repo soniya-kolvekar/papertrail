@@ -17,7 +17,7 @@ function Main() {
         <Route path="/app" element={<App />} />
 
         {/* Template Management */}
-        <Route path="/templates" element={<Templates />} />
+        <Route path="templates" element={<Templates />} />
 
         {/* Prompt Builder */}
         <Route path="/prompt-builder" element={<PromptBuilder />} />
