@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { generateCaption } from "../services/captionApi";
+import { generateCaption } from "../../services/captionApi";
 
 export default function CaptionGenerator() {
   const [content, setContent] = useState("");
@@ -27,7 +27,7 @@ export default function CaptionGenerator() {
       });
 
       setCaption(result);
-    } catch (err) {
+    } catch {
       setError("Failed to generate caption");
     } finally {
       setLoading(false);

@@ -1,47 +1,58 @@
 import type { Template } from "../types/templates";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/templates";
-;
+const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "http://localhost:5000/api/templates";
 
+// GET all templates
 export async function getTemplates(): Promise<Template[]> {
   const res = await fetch(BASE_URL);
   if (!res.ok) throw new Error("Failed to fetch templates");
-  return res.json();
+  return await res.json();
 }
 
-export async function createTemplate(template: Template): Promise<void> {
+// CREATE template
+export async function createTemplate(
+  template: Omit<Template, "_id" | "createdAt" | "updatedAt">
+): Promise<Template> {
   const res = await fetch(BASE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(template)
+    body: JSON.stringify(template),
   });
 
   if (!res.ok) {
     const err = await res.json();
-    throw new Error(err.message);
+    throw new Error(err.message || "Failed to create template");
   }
+
+  return await res.json();
 }
 
-export async function deleteTemplate(id: string): Promise<void> {
-  const res = await fetch(`${BASE_URL}/${id}`, {
-    method: "DELETE"
-  });
-
-  if (!res.ok) throw new Error("Failed to delete template");
-}
-
+// UPDATE template
 export async function updateTemplate(
   id: string,
   updatedData: Partial<Template>
-): Promise<void> {
+): Promise<Template> {
   const res = await fetch(`${BASE_URL}/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updatedData)
+    body: JSON.stringify(updatedData),
   });
 
   if (!res.ok) {
     const err = await res.json();
-    throw new Error(err.message);
+    throw new Error(err.message || "Failed to update template");
   }
+
+  return await res.json();
+}
+
+// DELETE template
+export async function deleteTemplate(id: string): Promise<void> {
+  const res = await fetch(`${BASE_URL}/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!res.ok) throw new Error("Failed to delete template");
 }
