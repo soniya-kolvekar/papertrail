@@ -1,6 +1,6 @@
-# WriteUp
+# papertrail
 
-**WriteUp** is an open-source, self-hosted web app for turning audio or video into clear written documents.
+**papertrail** is an open-source, self-hosted web app for turning audio or video into clear written documents.
 
 It helps generate meeting minutes, captions, and letters while keeping everything private and under your control.
 
@@ -8,7 +8,7 @@ It helps generate meeting minutes, captions, and letters while keeping everythin
 
 ## What it’s for
 
-WriteUp is built for students, teams, and small organizations that need proper documentation without relying on cloud-heavy or data-hungry tools.
+papertrail is built for students, teams, and small organizations that need proper documentation without relying on cloud-heavy or data-hungry tools.
 
 No accounts.  
 No permanent storage.  
@@ -40,7 +40,7 @@ All outputs are editable before export.
 
 ## Privacy & control
 
-WriteUp runs locally or on your own machine or server.
+papertrail runs locally or on your own machine or server.
 
 Files are processed only for as long as needed and are never stored permanently.
 
@@ -54,6 +54,7 @@ Local-first by default.
 Simple workflows.  
 Open-source and transparent.  
 Built to be useful, not flashy.
+
 
 
 
