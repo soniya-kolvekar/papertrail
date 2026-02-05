@@ -1,6 +1,6 @@
 import express from "express";
 import { buildPrompt } from "../utils/promptTemplates.js";
-import { generateCaption } from "../services/hf.service.js";
+import { generateCaption } from "../services/gemini.service.js";
 
 const router = express.Router();
 

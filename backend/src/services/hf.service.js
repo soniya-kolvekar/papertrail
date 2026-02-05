@@ -1,13 +1,12 @@
-import { HfInference } from "@huggingface/inference";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
 dotenv.config();
 
-const HF_MODEL = "Qwen/Qwen2.5-7B-Instruct";
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-const hf = new HfInference(process.env.HF_API_KEY);
-
-if (!process.env.HF_API_KEY) {
-  console.warn("Warning: HF_API_KEY is missing via process.env");
+if (!process.env.GOOGLE_GEMINI_API_KEY) {
+  console.warn("Warning: GOOGLE_GEMINI_API_KEY is missing via process.env");
 }
 
 export async function generateCaption(prompt) {
@@ -15,29 +14,18 @@ export async function generateCaption(prompt) {
   const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
   try {
-    const response = await hf.chatCompletion({
-      model: HF_MODEL,
-      messages: [{ role: "user", content: prompt }],
-      max_tokens: 120,
-      temperature: 0.7,
-    }, { signal: controller.signal });
+    const response = await model.generateContent(prompt);
 
     clearTimeout(timeoutId);
 
-    if (
-      response &&
-      Array.isArray(response.choices) &&
-      response.choices.length > 0 &&
-      response.choices[0].message &&
-      typeof response.choices[0].message.content === "string"
-    ) {
-      return response.choices[0].message.content.trim();
+    if (response && response.response && response.response.text) {
+      return response.response.text().trim();
     }
 
-    throw new Error("Invalid response format from HF API");
+    throw new Error("Invalid response format from Gemini API");
   } catch (err) {
     clearTimeout(timeoutId);
-    console.error("HF Service Error:", err);
+    console.error("Gemini Service Error:", err);
     throw err;
   }
 }
