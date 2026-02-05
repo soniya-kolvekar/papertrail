@@ -1,5 +1,9 @@
 import { useState } from "react";
-import type { Template } from "../types/templates";
+import type {
+  Template,
+  TemplateSection,
+  TemplateType,
+} from "../types/templates";
 
 interface Props {
   template: Template;
@@ -7,14 +11,59 @@ interface Props {
   onClose: () => void;
 }
 
-export default function EditTemplateModal({ template, onSave, onClose }: Props) {
-  // State for all editable fields
+export default function EditTemplateModal({
+  template,
+  onSave,
+  onClose,
+}: Props) {
   const [name, setName] = useState(template.name);
-  const [type, setType] = useState(template.type);
+  const [type, setType] = useState<TemplateType>(template.type);
   const [tone, setTone] = useState(template.tone);
-  const [sections, setSections] = useState(template.format.sections.join(", "));
-  const [styleRules, setStyleRules] = useState(template.style_rules.join(", "));
-  const [promptInstruction, setPromptInstruction] = useState(template.prompt_instruction);
+
+  const [sections, setSections] = useState<TemplateSection[]>(
+    template.layout
+  );
+
+  const [globalRules, setGlobalRules] = useState(
+    template.global_rules.join(", ")
+  );
+
+  const [promptInstruction, setPromptInstruction] = useState(
+    template.prompt_instruction
+  );
+
+  function addSection() {
+    setSections((prev) => [
+      ...prev,
+      {
+        id: `section_${prev.length + 1}`,
+        label: "",
+        order: prev.length + 1,
+        section_type: "paragraph",
+        content_source: "ai_generated",
+      },
+    ]);
+  }
+
+  function updateSection<K extends keyof TemplateSection>(
+    index: number,
+    key: K,
+    value: TemplateSection[K]
+  ) {
+    const updated = [...sections];
+    updated[index] = { ...updated[index], [key]: value };
+    setSections(updated);
+  }
+
+  function removeSection(index: number) {
+    const updated = sections.filter((_, i) => i !== index);
+    setSections(
+      updated.map((s, i) => ({
+        ...s,
+        order: i + 1,
+      }))
+    );
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -23,8 +72,11 @@ export default function EditTemplateModal({ template, onSave, onClose }: Props) 
       name,
       type,
       tone,
-      format: { sections: sections.split(",").map(s => s.trim()) },
-      style_rules: styleRules.split(",").map(s => s.trim()),
+      layout: sections,
+      global_rules: globalRules
+        .split(",")
+        .map((r) => r.trim())
+        .filter(Boolean),
       prompt_instruction: promptInstruction,
     });
 
@@ -37,40 +89,50 @@ export default function EditTemplateModal({ template, onSave, onClose }: Props) 
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-background/80 backdrop-blur-md">
-      <div className="bg-background border border-secondary/30 w-full max-w-lg rounded-2xl shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-300">
-        
+      <div className="bg-background border border-secondary/30 w-full max-w-2xl rounded-2xl shadow-2xl">
         {/* Header */}
         <div className="p-6 border-b border-muted/20">
-          <h3 className="text-3xl font-amarna text-secondary">Modify Template</h3>
+          <h3 className="text-3xl font-amarna text-secondary">
+            Modify Template
+          </h3>
           <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mt-1">
             &gt; Template ID: {template.id}
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="p-6 space-y-6 max-h-[70vh] overflow-y-auto"
+        >
           {/* Name */}
           <div>
             <label className={labelClass}>Template Name</label>
             <input
               className={inputClass}
               value={name}
-              onChange={e => setName(e.target.value)}
-              placeholder="Template name"
+              onChange={(e) => setName(e.target.value)}
               required
             />
           </div>
 
           {/* Type */}
           <div>
-            <label className={labelClass}>Type</label>
-            <input
+            <label className={labelClass}>Document Type</label>
+            <select
               className={inputClass}
               value={type}
-              onChange={e => setType(e.target.value)}
-              placeholder="Type (e.g., MoM, Letter)"
-              required
-            />
+              onChange={(e) =>
+                setType(e.target.value as TemplateType)
+              }
+            >
+              <option value="custom">Custom</option>
+              <option value="letter">Letter</option>
+              <option value="report">Report</option>
+              <option value="essay">Essay</option>
+              <option value="email">Email</option>
+              <option value="resume">Resume</option>
+            </select>
           </div>
 
           {/* Tone */}
@@ -79,60 +141,124 @@ export default function EditTemplateModal({ template, onSave, onClose }: Props) 
             <input
               className={inputClass}
               value={tone}
-              onChange={e => setTone(e.target.value)}
-              placeholder="Tone (e.g., Formal, Friendly)"
-              required
+              onChange={(e) => setTone(e.target.value)}
             />
           </div>
 
           {/* Sections */}
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <label className={labelClass}>Document Structure</label>
+              <button
+                type="button"
+                onClick={addSection}
+                className="text-sm text-secondary"
+              >
+                + Add Section
+              </button>
+            </div>
+
+            {sections.map((section, index) => (
+              <div
+                key={section.id}
+                className="border rounded-lg p-4 space-y-3"
+              >
+                <div className="grid md:grid-cols-3 gap-4">
+                  <input
+                    className={inputClass}
+                    placeholder="Section Label"
+                    value={section.label}
+                    onChange={(e) =>
+                      updateSection(
+                        index,
+                        "label",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <select
+                    className={inputClass}
+                    value={section.section_type}
+                    onChange={(e) =>
+                      updateSection(
+                        index,
+                        "section_type",
+                        e.target.value as TemplateSection["section_type"]
+                      )
+                    }
+                  >
+                    <option value="heading">Heading</option>
+                    <option value="date">Date</option>
+                    <option value="title">Title</option>
+                    <option value="paragraph">Paragraph</option>
+                    <option value="body">Body</option>
+                    <option value="signature">Signature</option>
+                  </select>
+
+                  <select
+                    className={inputClass}
+                    value={section.content_source}
+                    onChange={(e) =>
+                      updateSection(
+                        index,
+                        "content_source",
+                        e.target.value as TemplateSection["content_source"]
+                      )
+                    }
+                  >
+                    <option value="user_input">User Input</option>
+                    <option value="ai_generated">AI Generated</option>
+                    <option value="static">Static</option>
+                  </select>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => removeSection(index)}
+                  className="text-xs text-red-500"
+                >
+                  Remove section
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Global Rules */}
           <div>
-            <label className={labelClass}>Sections</label>
+            <label className={labelClass}>Global Style Rules</label>
             <input
               className={inputClass}
-              value={sections}
-              onChange={e => setSections(e.target.value)}
-              placeholder="Sections (comma separated)"
-              required
+              value={globalRules}
+              onChange={(e) => setGlobalRules(e.target.value)}
+              placeholder="No emojis, concise, formal"
             />
           </div>
 
-          {/* Style Rules */}
+          {/* Prompt */}
           <div>
-            <label className={labelClass}>Style Rules</label>
-            <input
-              className={inputClass}
-              value={styleRules}
-              onChange={e => setStyleRules(e.target.value)}
-              placeholder="Style Rules (comma separated)"
-              required
-            />
-          </div>
-
-          {/* Prompt Instruction */}
-          <div>
-            <label className={labelClass}>Prompt Instruction</label>
+            <label className={labelClass}>AI Prompt Instruction</label>
             <textarea
-              className={inputClass + " resize-none h-24"}
+              className={`${inputClass} min-h-[100px]`}
               value={promptInstruction}
-              onChange={e => setPromptInstruction(e.target.value)}
-              placeholder="Instruction for AI prompt"
-              required
+              onChange={(e) =>
+                setPromptInstruction(e.target.value)
+              }
             />
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4">
+          <div className="flex justify-end gap-3 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 font-mono text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="font-mono text-muted-foreground"
             >
               [ CANCEL ]
             </button>
             <button
               type="submit"
-              className="px-8 py-2 bg-secondary text-secondary-foreground font-bold rounded-lg hover:shadow-[0_0_15px_rgba(var(--secondary),0.3)] transition-all"
+              className="px-8 py-2 bg-secondary text-secondary-foreground font-bold rounded-lg"
             >
               Update
             </button>
