@@ -309,9 +309,6 @@ export default function CaptionGenerator() {
                         value={caption}
                         readOnly
                       />
-                      <div className="absolute top-4 right-4 text-[10px] font-mono text-muted-foreground opacity-50 uppercase">
-                        Mistral-7B Optimized
-                      </div>
                     </div>
                   </div>
                 </div>
