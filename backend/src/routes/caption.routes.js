@@ -27,21 +27,24 @@ router.post("/generate", async (req, res) => {
       return res.status(404).json({ success: false, message: "Template not found" });
     }
 
-    // Inject platform/tone if provided
     const contextStr = `[Platform: ${platform || "General"}] [Tone: ${tone || "Professional"}]`;
     const structureStr = template.structure ? `[Output Structure: ${template.structure}]` : "[Output Structure: Standard]";
 
-    // Unified instructional prompt for one-shot text generation
+    let templateWithContent = template.content;
+    if (templateWithContent.includes("{{inputText}}")) {
+      templateWithContent = templateWithContent.replace(/{{inputText}}/g, inputText);
+    } else {
+      templateWithContent = `${templateWithContent}\n\n[Subject Content]:\n${inputText}`;
+    }
+
+    // Unified instructional prompt for one-shot chat generation
     const mergedPrompt = `
-[Instruction: Generate a punchy, high-engagement social media caption.]
+[Instruction: Generate content strictly following the provided blueprint.]
 [Context: Platform=${platform || "General"}, Tone=${tone || "Professional"}]
 [Structure: ${structureStr}]
 
-[Blueprint]:
-${template.content}
-
-[Subject Content]:
-${inputText}
+[Blueprint/Logic]:
+${templateWithContent}
 
 [Direct Output Only]:`.trim();
 

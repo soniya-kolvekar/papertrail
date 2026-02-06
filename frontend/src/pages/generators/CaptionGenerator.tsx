@@ -13,14 +13,14 @@ export default function CaptionGenerator() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Modal states
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<Template | null>(null);
   const [modalName, setModalName] = useState("");
   const [modalContent, setModalContent] = useState("");
   const [modalStructure, setModalStructure] = useState("");
 
-  // Preview Modal
+
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
 
   const captionTemplates = templates.filter(t => t.category === "caption");
@@ -103,19 +103,17 @@ export default function CaptionGenerator() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center p-4 md:p-10 relative overflow-y-auto">
-      {/* Background Ambient Glow */}
       <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] pointer-events-none opacity-50" />
       <div className="fixed bottom-0 left-0 w-[600px] h-[600px] bg-secondary/20 rounded-full blur-[120px] pointer-events-none opacity-50" />
 
       <div className="relative z-10 w-full max-w-6xl space-y-10 mt-6 pb-20">
-        {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-border pb-6">
           <div className="space-y-1">
             <h2 className="text-4xl md:text-6xl font-amarna font-black text-foreground tracking-tighter decoration-primary decoration-4">
-              CAPTION WORKSPACE
+              MEDIA CAPTIONS
             </h2>
             <p className="text-muted-foreground font-mono text-sm tracking-widest uppercase opacity-70">
-              High-Performance Social Copy Engine
+              Generate captions for your posts
             </p>
           </div>
           <button
@@ -153,7 +151,7 @@ export default function CaptionGenerator() {
 
               <div className="space-y-4">
                 <label className="text-xs font-black tracking-widest text-muted-foreground uppercase opacity-80">
-                  Brand Voice
+                  Tone
                 </label>
                 <select
                   className="w-full p-4 bg-background/50 border border-border rounded-2xl text-foreground font-bold focus:ring-2 focus:ring-primary/50 appearance-none cursor-pointer hover:bg-background/80 transition-colors"
@@ -171,7 +169,7 @@ export default function CaptionGenerator() {
             {/* Content Input Area */}
             <div className="bg-card/40 backdrop-blur-xl border border-border rounded-3xl p-8 space-y-4 shadow-xl">
               <label className="text-xs font-black tracking-widest text-muted-foreground uppercase opacity-80">
-                Core Message
+                Info about the media
               </label>
               <textarea
                 className="w-full min-h-[200px] p-6 text-lg bg-background/50 border border-border rounded-2xl focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-muted-foreground/30 resize-none font-medium leading-relaxed"
@@ -201,10 +199,10 @@ export default function CaptionGenerator() {
             <div className="space-y-6">
               <div className="flex justify-between items-center px-1">
                 <label className="text-sm font-black tracking-widest text-foreground uppercase">
-                  Select Blueprint
+                  Select Template
                 </label>
                 <span className="text-[10px] font-mono text-muted-foreground uppercase">
-                  {captionTemplates.length} Designs Loaded
+                  {captionTemplates.length} Templates Loaded
                 </span>
               </div>
 
@@ -222,7 +220,7 @@ export default function CaptionGenerator() {
                       <div className="space-y-2">
                         <div className="flex justify-between items-start">
                           <div
-                            className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${t.type === "system" ? "bg-secondary text-secondary-foreground" : "bg-primary/20 text-primary"
+                            className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${t.type === "system" ? "bg-secondary text-black" : "bg-primary/20 text-primary"
                               }`}
                           >
                             {t.type}
@@ -232,9 +230,9 @@ export default function CaptionGenerator() {
                               e.stopPropagation();
                               setPreviewTemplate(t);
                             }}
-                            className="p-1.5 bg-background/50 rounded-lg hover:bg-background transition-colors text-muted-foreground hover:text-foreground"
+                            className="px-2 py-1 text-xs bg-background/50 rounded-lg hover:bg-background transition-colors text-muted-foreground hover:text-foreground"
                           >
-                            👁️
+                            Preview
                           </button>
                         </div>
                         <h4 className="font-bold text-sm leading-tight text-foreground line-clamp-2">
@@ -264,7 +262,7 @@ export default function CaptionGenerator() {
                               onClick={(e) => openEditModal(t, e)}
                               className="flex-1 py-1.5 bg-background/50 text-[10px] font-black rounded-lg hover:bg-background"
                             >
-                              EDIT
+                              Edit
                             </button>
                             <button
                               onClick={(e) => {
@@ -297,8 +295,8 @@ export default function CaptionGenerator() {
                   <div className="bg-background rounded-[2.3rem] p-10 space-y-8">
                     <div className="flex justify-between items-start">
                       <div className="space-y-1">
-                        <span className="text-[10px] font-black text-primary tracking-[0.3em] uppercase">Generated Output</span>
-                        <h3 className="text-3xl font-black text-foreground tracking-tighter">THE FINAL COPY</h3>
+                        <span className="text-[10px] font-black text-primary tracking-[0.3em] uppercase">All done!</span>
+                        <h4 className="text-3xl font-black text-foreground tracking-tighter">Here's your caption</h4>
                       </div>
                       <CopyButton text={caption} />
                     </div>
@@ -321,65 +319,108 @@ export default function CaptionGenerator() {
       {/* Template Create/Edit Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/90 backdrop-blur-xl">
-          <div className="bg-card border-4 border-border w-full max-w-2xl rounded-[3rem] shadow-3xl p-12 space-y-10 animate-in zoom-in-95 duration-300">
-            <div className="space-y-2">
-              <h3 className="text-4xl font-black text-foreground tracking-tighter uppercase">
-                {editingTemplate ? "Refine Design" : "New Blueprint"}
-              </h3>
-              <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest">
-                Define the logic for your content generation
-              </p>
+          <div className="bg-card border-4 border-border w-full max-w-2xl rounded-[3rem] shadow-3xl p-10 space-y-8 animate-in zoom-in-95 duration-300 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-start">
+              <div className="space-y-1">
+                <h3 className="text-4xl font-black text-foreground tracking-tighter uppercase">
+                  {editingTemplate ? "Edit Template" : "Create New Template"}
+                </h3>
+                <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest">
+                  Define how you want your content to be built
+                </p>
+              </div>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-2xl hover:scale-110 transition-transform p-2"
+              >
+                ✕
+              </button>
             </div>
 
             <div className="space-y-8">
+              {/* Field 1: Name */}
               <div className="space-y-3">
-                <label className="text-xs font-black uppercase text-muted-foreground ml-1 tracking-widest">Template Identifier</label>
+                <label className="text-sm font-black uppercase text-foreground tracking-widest">1. Name your template</label>
                 <input
                   type="text"
                   className="w-full p-5 bg-background border-2 border-border rounded-2xl text-xl font-bold focus:border-primary transition-all"
-                  placeholder="e.g. THOUGHT LEADERSHIP (LINKEDIN)"
+                  placeholder="e.g. My Custom Instagram Style"
                   value={modalName}
                   onChange={(e) => setModalName(e.target.value)}
                 />
               </div>
 
-              <div className="space-y-3">
-                <label className="text-xs font-black uppercase text-muted-foreground ml-1 tracking-widest">Visual Structure Preview</label>
+              {/* Field 2: Structure */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-end">
+                  <label className="text-sm font-black uppercase text-foreground tracking-widest">2. Content Plan (Layout)</label>
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold">Pick a style or type your own</span>
+                </div>
+
+                {/* Preset Chips */}
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {[
+                    { label: "Social Caption", structure: "Hook → Body → CTA", content: "Write a catchy social post about: {{inputText}}" },
+                    { label: "Formal Letter", structure: "Date → Recipient → Body → Sign-off", content: "Write a professional letter based on this info: {{inputText}}" },
+                    { label: "MoM (Meeting)", structure: "Attendees → Agenda → Key Points → Action Items", content: "Summarize these meeting notes into structured minutes: {{inputText}}" }
+                  ].map(preset => (
+                    <button
+                      key={preset.label}
+                      onClick={() => {
+                        setModalStructure(preset.structure);
+                        // Only set content if it's empty to avoid overwriting user progress
+                        if (!modalContent.trim()) {
+                          setModalContent(preset.content);
+                        }
+                      }}
+                      className="px-3 py-1.5 bg-muted/30 border border-border rounded-full text-[10px] font-bold hover:bg-primary/20 hover:border-primary transition-all"
+                    >
+                      + {preset.label}
+                    </button>
+                  ))}
+                </div>
+
                 <input
                   type="text"
-                  className="w-full p-5 bg-background border-2 border-border rounded-2xl text-lg font-bold focus:border-primary transition-all"
-                  placeholder="e.g. Hook → Value Proposition → CTA"
+                  className="w-full p-4 bg-background border-2 border-border rounded-2xl text-lg font-bold focus:border-primary transition-all"
+                  placeholder="Hook → Body → Details → Closing"
                   value={modalStructure}
                   onChange={(e) => setModalStructure(e.target.value)}
                 />
               </div>
 
-              <div className="space-y-3">
+              {/* Field 3: AI Prompt */}
+              <div className="space-y-4">
                 <div className="flex justify-between items-end">
-                  <label className="text-xs font-black uppercase text-muted-foreground ml-1 tracking-widest">AI Prompt Logic</label>
-                  <span className="text-[10px] font-mono text-primary bg-primary/10 px-2 py-1 rounded">{"{{inputText}}"} is required</span>
+                  <label className="text-sm font-black uppercase text-foreground tracking-widest">3. AI Instructions</label>
+                </div>
+                <div className="p-4 bg-primary/5 border border-primary/20 rounded-2xl mb-2">
+                  <p className="text-[11px] text-primary leading-relaxed font-bold">
+                    💡 The code <code className="bg-primary/10 px-1 rounded">{"{{inputText}}"}</code> is where the message you type in the main workspace will appear.
+                  </p>
                 </div>
                 <textarea
-                  className="w-full min-h-[200px] p-6 bg-background border-2 border-border rounded-2xl text-lg font-medium resize-none focus:border-primary transition-all leading-relaxed"
-                  placeholder="Example: Act as a high-status founder. Craft a post about {{inputText}}..."
+                  className="w-full min-h-[160px] p-6 bg-background border-2 border-border rounded-2xl text-base font-medium resize-none focus:border-primary transition-all leading-relaxed"
+                  placeholder={`Example: Write a formal letter regarding {{inputText}} and ensure it sounds professional.`}
                   value={modalContent}
                   onChange={(e) => setModalContent(e.target.value)}
                 />
               </div>
             </div>
 
-            <div className="flex gap-6">
+            <div className="flex gap-4 pt-4">
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="flex-1 py-5 bg-muted/20 border-2 border-border rounded-2xl font-black uppercase tracking-tighter hover:bg-muted/40 transition-all"
               >
-                DISCARD
+                Discard
               </button>
               <button
                 onClick={handleSaveTemplate}
-                className="flex-1 py-5 bg-foreground text-background rounded-2xl font-black uppercase tracking-tighter hover:scale-105 transition-all shadow-xl"
+                disabled={!modalName.trim() || !modalContent.trim()}
+                className="flex-[2] py-5 bg-primary text-primary-foreground rounded-2xl font-black uppercase tracking-tighter hover:scale-105 active:scale-95 transition-all shadow-xl disabled:opacity-30"
               >
-                SAVE DESIGN
+                Save Template
               </button>
             </div>
           </div>
@@ -439,7 +480,7 @@ function CopyButton({ text }: { text: string }) {
       className={`px-8 py-4 rounded-full font-black text-sm tracking-tighter transition-all shadow-lg flex items-center gap-2 ${copied ? "bg-green-500 text-white" : "bg-foreground text-background hover:scale-105"
         }`}
     >
-      {copied ? "COPIED!" : "COPY COPY"}
+      {copied ? "COPIED!" : "COPY"}
     </button>
   );
 }
