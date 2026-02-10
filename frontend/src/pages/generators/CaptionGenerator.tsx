@@ -244,7 +244,7 @@ export default function CaptionGenerator() {
                         <div className="h-20 opacity-30 select-none">
                           {t.structure ? (
                             <div className="flex flex-col gap-1">
-                              {t.structure.split("→").map((_: string, i: number) => (
+                              {t.structure.split(/\s*[+→]\s*/).map((_: string, i: number) => (
                                 <div key={i} className="w-full h-2 bg-foreground/20 rounded-full" style={{ width: `${Math.max(40, 100 - i * 15)}%` }} />
                               ))}
                             </div>
@@ -360,9 +360,9 @@ export default function CaptionGenerator() {
                 {/* Preset Chips */}
                 <div className="flex flex-wrap gap-2 mb-2">
                   {[
-                    { label: "Social Caption", structure: "Hook → Body → CTA", content: "Write a catchy social post about: {{inputText}}" },
-                    { label: "Formal Letter", structure: "Date → Recipient → Body → Sign-off", content: "Write a professional letter based on this info: {{inputText}}" },
-                    { label: "MoM (Meeting)", structure: "Attendees → Agenda → Key Points → Action Items", content: "Summarize these meeting notes into structured minutes: {{inputText}}" }
+                    { label: "Social Caption", structure: "Hook + Body + CTA", content: "Write a catchy social post about: {{inputText}}" },
+                    { label: "Formal Letter", structure: "Date + Recipient + Body + Sign-off", content: "Write a professional letter based on this info: {{inputText}}" },
+                    { label: "MoM (Meeting)", structure: "Attendees + Agenda + Key Points + Action Items", content: "Summarize these meeting notes into structured minutes: {{inputText}}" }
                   ].map(preset => (
                     <button
                       key={preset.label}
@@ -441,7 +441,7 @@ export default function CaptionGenerator() {
             <div className="space-y-4">
               <label className="text-[10px] font-black text-muted-foreground tracking-widest uppercase opacity-70">Anticipated Content Layout</label>
               <div className="p-8 bg-muted/30 rounded-[2rem] border-2 border-dashed border-border/50 text-foreground font-bold text-lg text-center flex flex-col gap-4">
-                {previewTemplate.structure.split("→").map((step: string, i: number) => (
+                {previewTemplate.structure.split(/\s*[+→]\s*/).map((step: string, i: number) => (
                   <div key={i} className="py-2 bg-background/50 rounded-xl border border-border/20 shadow-sm">
                     {step.trim()}
                   </div>

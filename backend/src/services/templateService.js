@@ -63,7 +63,7 @@ export function createTemplate(templateData) {
     id,
     name: templateData.name || "Untitled Template",
     category: templateData.category || "caption",
-    structure: templateData.structure || "Opening → Body → Conclusion",
+    structure: templateData.structure || "Opening + Body + Conclusion",
     content: templateData.content || "",
     type: "user",
     createdBy: templateData.createdBy || "Anonymous",

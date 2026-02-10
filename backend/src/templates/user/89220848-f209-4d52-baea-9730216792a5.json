@@ -1,0 +1,11 @@
+{
+  "id": "89220848-f209-4d52-baea-9730216792a5",
+  "name": "email",
+  "category": "letter",
+  "structure": "Subject + Body + Closing",
+  "content": "Write a formal letter based on: {{inputText}}\n\nMaintain professional tone and standard formatting.",
+  "type": "user",
+  "createdBy": "Anonymous",
+  "createdAt": "2026-02-10T06:04:36.630Z",
+  "updatedAt": "2026-02-10T06:04:36.630Z"
+}

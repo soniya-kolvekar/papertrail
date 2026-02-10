@@ -229,7 +229,7 @@ export default function LetterGenerator() {
                         <div className="h-20 opacity-30 select-none">
                           {t.structure ? (
                             <div className="flex flex-col gap-1">
-                              {t.structure.split("→").map((_: string, i: number) => (
+                              {t.structure.split(/\s*[+→]\s*/).map((_: string, i: number) => (
                                 <div key={i} className="w-full h-2 bg-foreground/20 rounded-full" style={{ width: `${Math.max(40, 100 - i * 15)}%` }} />
                               ))}
                             </div>
@@ -345,10 +345,10 @@ export default function LetterGenerator() {
                 {/* Preset Chips */}
                 <div className="flex flex-wrap gap-2 mb-2">
                   {[
-                    { label: "Formal Letter", structure: "Sender Info → Date → Recipient → Salutation → Body → Closing", content: "Write a formal letter based on: {{inputText}}\n\nMaintain professional tone and standard formatting." },
-                    { label: "Application", structure: "Header → Subject → Body → Request → Closing", content: "Write a formal application letter for: {{inputText}}\n\nInclude proper salutation and professional closing." },
-                    { label: "Complaint", structure: "Reference → Issue Description → Impact → Resolution Request → Deadline", content: "Write a professional complaint letter about: {{inputText}}\n\nBe assertive but professional." },
-                    { label: "Recommendation", structure: "Introduction → Relationship → Qualities → Examples → Endorsement", content: "Write a recommendation letter for: {{inputText}}\n\nHighlight strengths with specific examples." }
+                    { label: "Formal Letter", structure: "Sender Info + Date + Recipient + Salutation + Body + Closing", content: "Write a formal letter based on: {{inputText}}\n\nMaintain professional tone and standard formatting." },
+                    { label: "Application", structure: "Header + Subject + Body + Request + Closing", content: "Write a formal application letter for: {{inputText}}\n\nInclude proper salutation and professional closing." },
+                    { label: "Complaint", structure: "Reference + Issue Description + Impact + Resolution Request + Deadline", content: "Write a professional complaint letter about: {{inputText}}\n\nBe assertive but professional." },
+                    { label: "Recommendation", structure: "Introduction + Relationship + Qualities + Examples + Endorsement", content: "Write a recommendation letter for: {{inputText}}\n\nHighlight strengths with specific examples." }
                   ].map(preset => (
                     <button
                       key={preset.label}
@@ -381,7 +381,7 @@ export default function LetterGenerator() {
                 </div>
                 <div className="p-4 bg-primary/5 border border-primary/20 rounded-2xl mb-2">
                   <p className="text-[11px] text-primary leading-relaxed font-bold">
-                    💡 The code <code className="bg-primary/10 px-1 rounded">{"{{inputText}}"}</code> is where the letter details you type in the workspace will appear.
+                    The code <code className="bg-primary/10 px-1 rounded">{"{{inputText}}"}</code> is where the letter details you type in the workspace will appear.
                   </p>
                 </div>
                 <textarea
@@ -426,7 +426,7 @@ export default function LetterGenerator() {
             <div className="space-y-4">
               <label className="text-[10px] font-black text-muted-foreground tracking-widest uppercase opacity-70">Letter Structure</label>
               <div className="p-8 bg-muted/30 rounded-[2rem] border-2 border-dashed border-border/50 text-foreground font-bold text-lg text-center flex flex-col gap-4">
-                {previewTemplate.structure.split("→").map((step: string, i: number) => (
+                {previewTemplate.structure.split(/\s*[+→]\s*/).map((step: string, i: number) => (
                   <div key={i} className="py-2 bg-background/50 rounded-xl border border-border/20 shadow-sm">
                     {step.trim()}
                   </div>

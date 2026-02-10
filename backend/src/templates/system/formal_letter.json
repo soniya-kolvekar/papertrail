@@ -2,7 +2,7 @@
   "id": "formal-letter",
   "name": "Formal Letter",
   "category": "letter",
-  "structure": "Sender Info → Date → Recipient Info → Salutation → Formal Body → Closing",
+  "structure": "Sender Info + Date + Recipient Info + Salutation + Formal Body + Closing",
   "content": "You are a professional assistant. Write a formal letter based on the following details:\n\n{{inputText}}\n\nRules:\n- Maintain a professional and respectful tone.\n- Use standard letter formatting.\n- Be concise and clear.",
   "type": "system",
   "createdAt": "2026-02-06T10:00:00Z",
